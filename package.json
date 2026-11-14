@@ -1,0 +1,16 @@
+{
+  "name": "bar-chart-race",
+  "version": "1.0.0",
+  "description": "CLI tool to generate bar chart race visualizations as standalone HTML and video/GIF, with no third-party service dependency.",
+  "type": "module",
+  "bin": {
+    "bar-chart-race": "./bin/cli.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "d3": "^7.9.0",
+    "ffmpeg-static": "^5.2.0",
+    "puppeteer": "^23.9.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "csv": "sample-hot-toys.csv",
+  "output": "out",
+  "format": "both",
+  "topN": 8,
+  "title": "Hot Toys - Movie MasterPiece Announced Items",
+  "subtitle": "Trend of announced Hot Toys products in the Movie Masterpiece Series",
+  "sourceText": "Source: collectorboy.cz",
+  "sourceUrl": "https://collectorboy.cz",
+  "fps": 30,
+  "duration": 0.6,
+  "width": 1345,
+  "height": 689
+}

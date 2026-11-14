@@ -1,0 +1,178 @@
+/* All colors, fonts and sizes below read from custom properties that
+   src/theme.js injects as a :root block ahead of this stylesheet
+   (see DEFAULT_THEME there for the values a plain build uses). */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-family);
+}
+
+#chart-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 28px 40px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-title);
+  text-align: center;
+}
+
+#subtitle {
+  font-size: var(--font-size-subtitle);
+  font-weight: var(--font-weight-subtitle);
+  color: var(--muted);
+  text-align: center;
+  margin-top: 6px;
+}
+
+#plot-area {
+  position: relative;
+  flex: 1;
+  margin-top: 18px;
+  min-height: 0;
+}
+
+#chart-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.axis-label {
+  font-size: var(--font-size-axis-label);
+  fill: var(--muted);
+}
+
+.grid-line {
+  stroke: var(--grid-line);
+  stroke-width: 1;
+}
+
+.bar-name {
+  font-size: var(--font-size-bar-label);
+  font-weight: var(--font-weight-bar-label);
+  fill: var(--fg);
+  text-anchor: end;
+}
+
+.bar-value {
+  font-size: var(--font-size-bar-value);
+  font-weight: var(--font-weight-bar-value);
+  fill: var(--fg);
+}
+
+.bar-rect {
+  fill: var(--bar-fill);
+}
+
+#counter {
+  position: absolute;
+  right: 0;
+  bottom: 58px;
+  text-align: right;
+  line-height: 1;
+}
+
+#counter-date {
+  font-size: var(--font-size-counter-date);
+  font-weight: var(--font-weight-counter-date);
+  letter-spacing: 1px;
+}
+
+#counter-total {
+  font-size: var(--font-size-counter-total);
+  font-weight: var(--font-weight-counter-total);
+  margin-top: 4px;
+}
+
+#counter-total .value {
+  font-weight: 800;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+#play-toggle {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--fg);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#scrubber-wrap {
+  position: relative;
+  flex: 1;
+  height: 38px;
+}
+
+#scrubber-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tick-line {
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.tick-label {
+  font-size: var(--font-size-tick-label);
+  fill: var(--muted);
+  text-anchor: middle;
+}
+
+.scrub-track {
+  stroke: var(--muted);
+  stroke-width: 2;
+}
+
+.scrub-handle {
+  fill: var(--fg);
+}
+
+#scrubber-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+#source {
+  text-align: center;
+  font-size: var(--font-size-source);
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+#source a {
+  color: var(--fg);
+}

@@ -1,0 +1,30 @@
+{
+  "fontFamily": "'Georgia', 'Times New Roman', serif",
+  "colors": {
+    "background": "#0f1115",
+    "foreground": "#e7e9ee",
+    "muted": "rgba(231, 233, 238, 0.65)",
+    "barFill": "#4e79a7",
+    "gridLine": "rgba(231, 233, 238, 0.25)",
+    "accent": "#f28e2b"
+  },
+  "fontSize": {
+    "title": 32,
+    "subtitle": 16,
+    "axisLabel": 13,
+    "barLabel": 15,
+    "barValue": 15,
+    "counterDate": 48,
+    "counterTotal": 22,
+    "tickLabel": 12,
+    "source": 12
+  },
+  "fontWeight": {
+    "title": 700,
+    "subtitle": 400,
+    "barLabel": 400,
+    "barValue": 600,
+    "counterDate": 700,
+    "counterTotal": 500
+  }
+}

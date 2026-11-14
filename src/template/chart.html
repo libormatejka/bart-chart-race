@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{TITLE}}</title>
+    <style>
+      html, body { height: 100%; }
+      {{THEME_VARS}}
+      {{STYLE}}
+    </style>
+  </head>
+  <body>
+    <div id="chart-root">
+      <div id="title"></div>
+      <div id="subtitle"></div>
+      <div id="plot-area">
+        <svg id="chart-svg"></svg>
+        <div id="counter">
+          <div id="counter-date"></div>
+          <div id="counter-total">Total: <span class="value"></span></div>
+        </div>
+      </div>
+      <div id="controls">
+        <button id="play-toggle" type="button" aria-label="Play/pause">&#10074;&#10074;</button>
+        <div id="scrubber-wrap">
+          <svg id="scrubber-svg"></svg>
+          <input id="scrubber-input" type="range" min="0" step="1" value="0" />
+        </div>
+      </div>
+      <div id="source"></div>
+    </div>
+    <script>{{D3_SOURCE}}</script>
+    <script>window.__CHART_DATA__ = {{DATA_JSON}};</script>
+    <script>{{CHART_SCRIPT}}</script>
+  </body>
+</html>
