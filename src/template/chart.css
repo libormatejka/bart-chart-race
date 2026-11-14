@@ -26,6 +26,7 @@ body {
   font-family: var(--font-family-title);
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-title);
+  color: var(--color-title);
   text-align: center;
 }
 
@@ -33,7 +34,7 @@ body {
   font-family: var(--font-family-subtitle);
   font-size: var(--font-size-subtitle);
   font-weight: var(--font-weight-subtitle);
-  color: var(--muted);
+  color: var(--color-subtitle);
   text-align: center;
   margin-top: 6px;
 }
@@ -54,7 +55,8 @@ body {
 .axis-label {
   font-family: var(--font-family-axis-label);
   font-size: var(--font-size-axis-label);
-  fill: var(--muted);
+  font-weight: var(--font-weight-axis-label);
+  fill: var(--color-axis-label);
 }
 
 .grid-line {
@@ -66,7 +68,7 @@ body {
   font-family: var(--font-family-bar-label);
   font-size: var(--font-size-bar-label);
   font-weight: var(--font-weight-bar-label);
-  fill: var(--fg);
+  fill: var(--color-bar-label);
   text-anchor: end;
 }
 
@@ -74,7 +76,7 @@ body {
   font-family: var(--font-family-bar-value);
   font-size: var(--font-size-bar-value);
   font-weight: var(--font-weight-bar-value);
-  fill: var(--fg);
+  fill: var(--color-bar-value);
 }
 
 .bar-rect {
@@ -93,6 +95,7 @@ body {
   font-family: var(--font-family-counter-date);
   font-size: var(--font-size-counter-date);
   font-weight: var(--font-weight-counter-date);
+  color: var(--color-counter-date);
   letter-spacing: 1px;
 }
 
@@ -100,11 +103,14 @@ body {
   font-family: var(--font-family-counter-total);
   font-size: var(--font-size-counter-total);
   font-weight: var(--font-weight-counter-total);
+  color: var(--color-counter-total);
   margin-top: 4px;
 }
 
 #counter-total .value {
-  font-weight: 800;
+  font-size: var(--font-size-counter-total-value);
+  font-weight: var(--font-weight-counter-total-value);
+  color: var(--color-counter-total-value);
 }
 
 #controls {
@@ -150,7 +156,8 @@ body {
 .tick-label {
   font-family: var(--font-family-tick-label);
   font-size: var(--font-size-tick-label);
-  fill: var(--muted);
+  font-weight: var(--font-weight-tick-label);
+  fill: var(--color-tick-label);
   text-anchor: middle;
 }
 
@@ -177,10 +184,14 @@ body {
   text-align: center;
   font-family: var(--font-family-source);
   font-size: var(--font-size-source);
-  color: var(--muted);
+  font-weight: var(--font-weight-source);
+  color: var(--color-source);
   margin-top: 10px;
 }
 
 #source a {
-  color: var(--fg);
+  font-family: var(--font-family-source-link);
+  font-size: var(--font-size-source-link);
+  font-weight: var(--font-weight-source-link);
+  color: var(--color-source-link);
 }

@@ -2,30 +2,34 @@ import { readFileSync } from "node:fs";
 import { dirname, extname, join } from "node:path";
 
 const DEFAULT_FONT_STACK = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+const FG = "#ffffff";
+const MUTED = "rgba(255, 255, 255, 0.75)";
+
+// Every one of these component keys can be set independently in
+// fontFamily / fontSize / fontWeight / color below.
+const COMPONENTS = [
+  "title",
+  "subtitle",
+  "axisLabel",
+  "barLabel",
+  "barValue",
+  "counterDate",
+  "counterTotal",
+  "counterTotalValue", // the bold number inside "Total: <value>"
+  "tickLabel",
+  "source",
+  "sourceLink", // the clickable part when sourceUrl is set
+];
+
+function sameForAllComponents(value) {
+  return Object.fromEntries(COMPONENTS.map((key) => [key, value]));
+}
 
 export const DEFAULT_THEME = {
   // Same font for every text element by default; override any key to set
   // a different font just for that element (e.g. a serif title but a
   // sans-serif everything else).
-  fontFamily: {
-    title: DEFAULT_FONT_STACK,
-    subtitle: DEFAULT_FONT_STACK,
-    axisLabel: DEFAULT_FONT_STACK,
-    barLabel: DEFAULT_FONT_STACK,
-    barValue: DEFAULT_FONT_STACK,
-    counterDate: DEFAULT_FONT_STACK,
-    counterTotal: DEFAULT_FONT_STACK,
-    tickLabel: DEFAULT_FONT_STACK,
-    source: DEFAULT_FONT_STACK,
-  },
-  colors: {
-    background: "#c6303e",
-    foreground: "#ffffff",
-    muted: "rgba(255, 255, 255, 0.75)",
-    barFill: "#fbdfe2",
-    gridLine: "rgba(255, 255, 255, 0.45)",
-    accent: "#ffe27a",
-  },
+  fontFamily: sameForAllComponents(DEFAULT_FONT_STACK),
   fontSize: {
     title: 34,
     subtitle: 18,
@@ -34,16 +38,47 @@ export const DEFAULT_THEME = {
     barValue: 16,
     counterDate: 52,
     counterTotal: 26,
+    counterTotalValue: 26,
     tickLabel: 13,
     source: 13,
+    sourceLink: 13,
   },
   fontWeight: {
     title: 800,
     subtitle: 500,
+    axisLabel: 400,
     barLabel: 400,
     barValue: 600,
     counterDate: 800,
     counterTotal: 500,
+    counterTotalValue: 800,
+    tickLabel: 400,
+    source: 400,
+    sourceLink: 400,
+  },
+  // Text/fill color per component — independent from the structural
+  // "colors" below (background, bar fill, grid/scrubber chrome).
+  color: {
+    title: FG,
+    subtitle: MUTED,
+    axisLabel: MUTED,
+    barLabel: FG,
+    barValue: FG,
+    counterDate: FG,
+    counterTotal: FG,
+    counterTotalValue: FG,
+    tickLabel: MUTED,
+    source: MUTED,
+    sourceLink: FG,
+  },
+  // Structural colors shared across the chart chrome (not text).
+  colors: {
+    background: "#c6303e",
+    foreground: FG, // scrub handle, play button icon, default text color
+    muted: MUTED, // scrub track, tick lines
+    barFill: "#fbdfe2",
+    gridLine: "rgba(255, 255, 255, 0.45)",
+    accent: "#ffe27a",
   },
   // Self-hosted font files to embed, e.g.
   // [{ "family": "Inter", "path": "fonts/Inter-Bold.woff2", "weight": 700 }]
@@ -53,7 +88,7 @@ export const DEFAULT_THEME = {
   fonts: [],
 };
 
-const MERGEABLE_GROUPS = ["fontFamily", "colors", "fontSize", "fontWeight"];
+const MERGEABLE_GROUPS = ["fontFamily", "fontSize", "fontWeight", "color", "colors"];
 
 /**
  * Loads a theme JSON file and deep-merges it over DEFAULT_THEME, so a
@@ -138,37 +173,21 @@ function mergeTheme(base, override) {
  */
 export function themeToCssVars(theme) {
   const vars = {
-    "--font-family-title": theme.fontFamily.title,
-    "--font-family-subtitle": theme.fontFamily.subtitle,
-    "--font-family-axis-label": theme.fontFamily.axisLabel,
-    "--font-family-bar-label": theme.fontFamily.barLabel,
-    "--font-family-bar-value": theme.fontFamily.barValue,
-    "--font-family-counter-date": theme.fontFamily.counterDate,
-    "--font-family-counter-total": theme.fontFamily.counterTotal,
-    "--font-family-tick-label": theme.fontFamily.tickLabel,
-    "--font-family-source": theme.fontFamily.source,
     "--bg": theme.colors.background,
     "--fg": theme.colors.foreground,
     "--muted": theme.colors.muted,
     "--bar-fill": theme.colors.barFill,
     "--grid-line": theme.colors.gridLine,
     "--accent": theme.colors.accent,
-    "--font-size-title": `${theme.fontSize.title}px`,
-    "--font-size-subtitle": `${theme.fontSize.subtitle}px`,
-    "--font-size-axis-label": `${theme.fontSize.axisLabel}px`,
-    "--font-size-bar-label": `${theme.fontSize.barLabel}px`,
-    "--font-size-bar-value": `${theme.fontSize.barValue}px`,
-    "--font-size-counter-date": `${theme.fontSize.counterDate}px`,
-    "--font-size-counter-total": `${theme.fontSize.counterTotal}px`,
-    "--font-size-tick-label": `${theme.fontSize.tickLabel}px`,
-    "--font-size-source": `${theme.fontSize.source}px`,
-    "--font-weight-title": theme.fontWeight.title,
-    "--font-weight-subtitle": theme.fontWeight.subtitle,
-    "--font-weight-bar-label": theme.fontWeight.barLabel,
-    "--font-weight-bar-value": theme.fontWeight.barValue,
-    "--font-weight-counter-date": theme.fontWeight.counterDate,
-    "--font-weight-counter-total": theme.fontWeight.counterTotal,
   };
+
+  for (const key of COMPONENTS) {
+    const cssKey = key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+    vars[`--font-family-${cssKey}`] = theme.fontFamily[key];
+    vars[`--font-size-${cssKey}`] = `${theme.fontSize[key]}px`;
+    vars[`--font-weight-${cssKey}`] = theme.fontWeight[key];
+    vars[`--color-${cssKey}`] = theme.color[key];
+  }
 
   const body = Object.entries(vars)
     .map(([name, value]) => `  ${name}: ${value};`)

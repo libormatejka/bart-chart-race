@@ -91,43 +91,72 @@ Font, velikosti písma a barvy se nastavují přes `--theme <soubor.json>`. Sta�
 node bin/cli.js sample-hot-toys.csv -o out --theme theme.sample.json
 ```
 
-Dostupné klíče:
+### Komponenty
+
+`fontFamily`, `fontSize`, `fontWeight` a `color` mají stejnou sadu klíčů — nastavuješ tak font, velikost, řez i barvu zvlášť pro každou textovou komponentu grafu:
+
+| Klíč | Co to je |
+| --- | --- |
+| `title` | hlavní titulek |
+| `subtitle` | podnadpis |
+| `axisLabel` | popisky hodnotové osy nahoře (0, 2, 4, ...) |
+| `barLabel` | jméno kategorie u pruhu |
+| `barValue` | číslo za pruhem |
+| `counterDate` | velké datum vpravo dole |
+| `counterTotal` | text "Total: " vpravo dole |
+| `counterTotalValue` | tučné číslo za "Total: " |
+| `tickLabel` | popisky na časové ose dole (2026-01, ...) |
+| `source` | text v patičce |
+| `sourceLink` | klikací část patičky (když je nastavené `sourceUrl`) |
+
+Chybějící klíče se vždy doplní z výchozí hodnoty. `fontFamily` navíc přijme i obyčejný string místo objektu — pak se použije pro úplně všechno.
 
 ```jsonc
 {
-  // Font pro každý textový prvek zvlášť. Chybějící klíče se doplní z
-  // výchozí hodnoty (stejný sans-serif font pro vše); lze poslat i
-  // obyčejný string místo objektu, pak se použije pro úplně všechno.
   "fontFamily": {
-    "title": "'Georgia', 'Times New Roman', serif",
-    "subtitle": "...",
-    "axisLabel": "...",
-    "barLabel": "...",   // jméno kategorie u pruhu
-    "barValue": "...",   // číslo za pruhem
-    "counterDate": "...", // velké datum vpravo dole
-    "counterTotal": "...",
-    "tickLabel": "...",  // popisky na časové ose dole
-    "source": "..."
-  },
-  "colors": {
-    "background": "#c6303e",
-    "foreground": "#ffffff",
-    "muted": "rgba(255,255,255,0.75)", // popisky dat, zdroj, ticky
-    "barFill": "#fbdfe2",
-    "gridLine": "rgba(255,255,255,0.45)",
-    "accent": "#ffe27a"               // zatím nepoužito, rezerva pro zvýraznění
+    "title": "'Georgia', 'Times New Roman', serif"
+    // zbytek klíčů viz tabulka výše
   },
   "fontSize": {
     "title": 34, "subtitle": 18, "axisLabel": 14,
     "barLabel": 16, "barValue": 16,
-    "counterDate": 52, "counterTotal": 26,
-    "tickLabel": 13, "source": 13       // v px
+    "counterDate": 52, "counterTotal": 26, "counterTotalValue": 26,
+    "tickLabel": 13, "source": 13, "sourceLink": 13   // v px
   },
   "fontWeight": {
-    "title": 800, "subtitle": 500,
+    "title": 800, "subtitle": 500, "axisLabel": 400,
     "barLabel": 400, "barValue": 600,
-    "counterDate": 800, "counterTotal": 500
+    "counterDate": 800, "counterTotal": 500, "counterTotalValue": 800,
+    "tickLabel": 400, "source": 400, "sourceLink": 400
+  },
+  "color": {
+    "title": "#ffffff", "subtitle": "rgba(255,255,255,0.75)",
+    "axisLabel": "rgba(255,255,255,0.75)",
+    "barLabel": "#ffffff", "barValue": "#ffffff",
+    "counterDate": "#ffffff", "counterTotal": "#ffffff", "counterTotalValue": "#ffffff",
+    "tickLabel": "rgba(255,255,255,0.75)",
+    "source": "rgba(255,255,255,0.75)", "sourceLink": "#ffffff"
+  },
+  // Strukturální barvy mimo text (ty samostatně per-komponentu nejsou).
+  "colors": {
+    "background": "#c6303e",
+    "foreground": "#ffffff",  // ovladač posuvníku, ikona play/pause
+    "muted": "rgba(255,255,255,0.75)", // trať posuvníku, rysky
+    "barFill": "#fbdfe2",
+    "gridLine": "rgba(255,255,255,0.45)",
+    "accent": "#ffe27a"               // zatím nepoužito, rezerva pro zvýraznění
   }
+}
+```
+
+Příklad — jen datum vpravo dole jinak (větší, serif, žluté), zbytek beze změny:
+
+```jsonc
+{
+  "fontFamily": { "counterDate": "Georgia, serif" },
+  "fontSize": { "counterDate": 60 },
+  "fontWeight": { "counterDate": 900 },
+  "color": { "counterDate": "#ffe27a", "counterTotalValue": "#ffe27a" }
 }
 ```
 
