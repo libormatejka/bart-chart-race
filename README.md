@@ -95,7 +95,20 @@ Dostupné klíče:
 
 ```jsonc
 {
-  "fontFamily": "...",               // libovolný CSS font-family stack
+  // Font pro každý textový prvek zvlášť. Chybějící klíče se doplní z
+  // výchozí hodnoty (stejný sans-serif font pro vše); lze poslat i
+  // obyčejný string místo objektu, pak se použije pro úplně všechno.
+  "fontFamily": {
+    "title": "'Georgia', 'Times New Roman', serif",
+    "subtitle": "...",
+    "axisLabel": "...",
+    "barLabel": "...",   // jméno kategorie u pruhu
+    "barValue": "...",   // číslo za pruhem
+    "counterDate": "...", // velké datum vpravo dole
+    "counterTotal": "...",
+    "tickLabel": "...",  // popisky na časové ose dole
+    "source": "..."
+  },
   "colors": {
     "background": "#c6303e",
     "foreground": "#ffffff",

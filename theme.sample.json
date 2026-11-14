@@ -1,5 +1,9 @@
 {
-  "fontFamily": "'Georgia', 'Times New Roman', serif",
+  "fontFamily": {
+    "title": "'Georgia', 'Times New Roman', serif",
+    "subtitle": "'Georgia', 'Times New Roman', serif",
+    "counterDate": "'Georgia', 'Times New Roman', serif"
+  },
   "colors": {
     "background": "#0f1115",
     "foreground": "#e7e9ee",

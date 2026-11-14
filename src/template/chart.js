@@ -53,7 +53,7 @@
 
   function measureMaxNameWidth() {
     const ctx = document.createElement("canvas").getContext("2d");
-    ctx.font = `${theme.fontWeight.barLabel} ${theme.fontSize.barLabel}px ${theme.fontFamily}`;
+    ctx.font = `${theme.fontWeight.barLabel} ${theme.fontSize.barLabel}px ${theme.fontFamily.barLabel}`;
     let max = 0;
     for (const frame of frames) {
       for (const bar of frame.bars) {

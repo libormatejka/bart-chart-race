@@ -1,7 +1,22 @@
 import { readFileSync } from "node:fs";
 
+const DEFAULT_FONT_STACK = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
 export const DEFAULT_THEME = {
-  fontFamily: "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+  // Same font for every text element by default; override any key to set
+  // a different font just for that element (e.g. a serif title but a
+  // sans-serif everything else).
+  fontFamily: {
+    title: DEFAULT_FONT_STACK,
+    subtitle: DEFAULT_FONT_STACK,
+    axisLabel: DEFAULT_FONT_STACK,
+    barLabel: DEFAULT_FONT_STACK,
+    barValue: DEFAULT_FONT_STACK,
+    counterDate: DEFAULT_FONT_STACK,
+    counterTotal: DEFAULT_FONT_STACK,
+    tickLabel: DEFAULT_FONT_STACK,
+    source: DEFAULT_FONT_STACK,
+  },
   colors: {
     background: "#c6303e",
     foreground: "#ffffff",
@@ -31,7 +46,7 @@ export const DEFAULT_THEME = {
   },
 };
 
-const MERGEABLE_GROUPS = ["colors", "fontSize", "fontWeight"];
+const MERGEABLE_GROUPS = ["fontFamily", "colors", "fontSize", "fontWeight"];
 
 /**
  * Loads a theme JSON file and deep-merges it over DEFAULT_THEME, so a
@@ -46,7 +61,13 @@ export function loadTheme(path) {
 function mergeTheme(base, override) {
   const merged = { ...base, ...override };
   for (const group of MERGEABLE_GROUPS) {
-    merged[group] = { ...base[group], ...(override[group] || {}) };
+    // A plain string for "fontFamily" (the old single-font shorthand)
+    // applies that font to every element.
+    const overrideGroup =
+      group === "fontFamily" && typeof override.fontFamily === "string"
+        ? Object.fromEntries(Object.keys(base.fontFamily).map((key) => [key, override.fontFamily]))
+        : override[group] || {};
+    merged[group] = { ...base[group], ...overrideGroup };
   }
   return merged;
 }
@@ -58,7 +79,15 @@ function mergeTheme(base, override) {
  */
 export function themeToCssVars(theme) {
   const vars = {
-    "--font-family": theme.fontFamily,
+    "--font-family-title": theme.fontFamily.title,
+    "--font-family-subtitle": theme.fontFamily.subtitle,
+    "--font-family-axis-label": theme.fontFamily.axisLabel,
+    "--font-family-bar-label": theme.fontFamily.barLabel,
+    "--font-family-bar-value": theme.fontFamily.barValue,
+    "--font-family-counter-date": theme.fontFamily.counterDate,
+    "--font-family-counter-total": theme.fontFamily.counterTotal,
+    "--font-family-tick-label": theme.fontFamily.tickLabel,
+    "--font-family-source": theme.fontFamily.source,
     "--bg": theme.colors.background,
     "--fg": theme.colors.foreground,
     "--muted": theme.colors.muted,
