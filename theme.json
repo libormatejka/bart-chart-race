@@ -1,0 +1,11 @@
+{
+  "fonts": [
+    { "family": "Domine", "path": "fonts/Domine-Bold.ttf", "weight": 700 }
+  ],
+  "fontFamily": {
+    "title": "Domine, serif"
+  },
+  "fontWeight": {
+    "title": 700
+  }
+}

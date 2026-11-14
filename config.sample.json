@@ -11,5 +11,6 @@
   "duration": 0.9,
   "width": 1345,
   "height": 689,
-  "dateFormat": "YYYY-MM"
+  "dateFormat": "YYYY-MM",
+  "theme": "theme.json"
 }
