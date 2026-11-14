@@ -8,7 +8,8 @@
   "sourceText": "Source: collectorboy.cz",
   "sourceUrl": "https://collectorboy.cz",
   "fps": 30,
-  "duration": 0.6,
+  "duration": 0.9,
   "width": 1345,
-  "height": 689
+  "height": 689,
+  "dateFormat": "YYYY-MM"
 }

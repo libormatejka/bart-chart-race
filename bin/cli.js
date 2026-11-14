@@ -36,6 +36,11 @@ program
   .option("--width <px>", "chart/video width in pixels", "1600")
   .option("--height <px>", "chart/video height in pixels", "900")
   .option(
+    "--date-format <format>",
+    "how to show dates on the timeline: YYYY or YYYY-MM",
+    "YYYY-MM"
+  )
+  .option(
     "--theme <path.json>",
     "JSON file overriding font/colors/sizes (see theme.sample.json)"
   )
@@ -76,6 +81,11 @@ async function run(inputArg, opts) {
     throw new Error(`Invalid --format "${format}". Use html, video, gif, or both.`);
   }
 
+  const dateFormat = pick("dateFormat");
+  if (!["YYYY", "YYYY-MM"].includes(dateFormat)) {
+    throw new Error(`Invalid --date-format "${dateFormat}". Use YYYY or YYYY-MM.`);
+  }
+
   const topN = Number(pick("topN"));
   const fps = Number(pick("fps"));
   const duration = Number(pick("duration"));
@@ -96,6 +106,7 @@ async function run(inputArg, opts) {
     sourceText: pick("sourceText"),
     sourceUrl: pick("sourceUrl"),
     dateLabels: parsed.dateLabels,
+    dateFormat,
     fps,
   };
 

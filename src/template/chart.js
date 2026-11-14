@@ -1,6 +1,14 @@
 (function () {
   const { frames, keyframeIndices, config, theme } = window.__CHART_DATA__;
-  const { dateLabels, fps, title, subtitle, sourceText, sourceUrl } = config;
+  const { dateLabels, fps, title, subtitle, sourceText, sourceUrl, dateFormat } = config;
+
+  function formatDateLabel(label) {
+    if (dateFormat === "YYYY") {
+      const m = /^(\d{4})/.exec(label);
+      return m ? m[1] : label;
+    }
+    return label;
+  }
 
   document.getElementById("title").textContent = title || "";
   document.getElementById("subtitle").textContent = subtitle || "";
@@ -99,10 +107,30 @@
       .attr("y1", trackY)
       .attr("y2", trackY);
 
-    const ticks = keyframeIndices.map((frameIdx, j) => ({
+    let ticks = keyframeIndices.map((frameIdx, j) => ({
       frameIdx,
-      label: dateLabels[j],
+      label: formatDateLabel(dateLabels[j]),
     }));
+
+    // Collapsing to "YYYY" naturally produces duplicate labels (one per
+    // original data point within the same year) — keep only the first.
+    if (dateFormat === "YYYY") {
+      const seen = new Set();
+      ticks = ticks.filter((t) => {
+        if (seen.has(t.label)) return false;
+        seen.add(t.label);
+        return true;
+      });
+    }
+
+    // However many ticks remain, thin them further so labels never overlap
+    // at the current track width.
+    const minGapPx = dateFormat === "YYYY" ? 40 : 70;
+    if (ticks.length > 1) {
+      const avgGap = (rect.width - 2 * edgePad) / (ticks.length - 1);
+      const stride = Math.max(1, Math.ceil(minGapPx / avgGap));
+      if (stride > 1) ticks = ticks.filter((_, i) => i % stride === 0);
+    }
 
     scrubberSvg
       .selectAll("line.tick-line")

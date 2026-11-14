@@ -45,7 +45,7 @@ Aby nebylo nutné psát při každém spuštění všechny přepínače znovu, l
 node bin/cli.js --config config.sample.json
 ```
 
-Config podporuje stejné klíče jako CLI přepínače (camelCase): `csv` (cesta nebo URL), `output`, `format`, `topN`, `title`, `subtitle`, `sourceText`, `sourceUrl`, `fps`, `duration`, `width`, `height`, `theme`. Libovolný CLI přepínač zadaný vedle `--config` má přednost — config je jen výchozí sada hodnot:
+Config podporuje stejné klíče jako CLI přepínače (camelCase): `csv` (cesta nebo URL), `output`, `format`, `topN`, `title`, `subtitle`, `sourceText`, `sourceUrl`, `fps`, `duration`, `width`, `height`, `dateFormat`, `theme`. Libovolný CLI přepínač zadaný vedle `--config` má přednost — config je jen výchozí sada hodnot:
 
 ```bash
 node bin/cli.js --config config.sample.json -t "Jiný titulek" --format video
@@ -80,6 +80,7 @@ Pro `config.sample.json` jsou k dispozici i zkratky přes `make` (jiný config l
 | `--fps <n>` | snímky za sekundu | `30` |
 | `--duration <s>` | délka přechodu mezi datovými body | `0.5` |
 | `--width`, `--height` | rozlišení v px (zaokrouhleno na sudé kvůli video kodeku) | `1600`, `900` |
+| `--date-format <YYYY\|YYYY-MM>` | formát popisků na časové ose dole; `YYYY` sloučí tiky na jeden za rok (hodí se při mnoha měsících, kdy by se `YYYY-MM` popisky překrývaly) | `YYYY-MM` |
 | `--theme <soubor.json>` | font/barvy/velikosti písma, viz níže | vestavěné červené téma |
 
 ## Theming
