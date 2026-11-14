@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { themeToCssVars } from "./theme.js";
+import { themeToCssVars, fontsToCssFaces } from "./theme.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const templateDir = join(__dirname, "template");
@@ -27,12 +27,16 @@ export function buildChartHtml({ frames, keyframeIndices, config, theme }) {
   const chartScript = readFileSync(join(templateDir, "chart.js"), "utf8");
   const d3Source = resolveD3Source();
   const themeVars = themeToCssVars(theme);
+  const fontFaces = fontsToCssFaces(theme.fonts || []);
 
-  const dataJson = JSON.stringify({ frames, keyframeIndices, config, theme });
+  // The client script only needs font *names* (for canvas text
+  // measurement), not the embedded font bytes already in the CSS above.
+  const { fonts, ...clientTheme } = theme;
+  const dataJson = JSON.stringify({ frames, keyframeIndices, config, theme: clientTheme });
 
   return html
     .replace("{{TITLE}}", () => escapeHtml(config.title || "Bar Chart Race"))
-    .replace("{{THEME_VARS}}", () => themeVars)
+    .replace("{{THEME_VARS}}", () => `${fontFaces}\n${themeVars}`)
     .replace("{{STYLE}}", () => style)
     .replace("{{D3_SOURCE}}", () => escapeScriptClose(d3Source))
     .replace("{{DATA_JSON}}", () => escapeScriptClose(dataJson))

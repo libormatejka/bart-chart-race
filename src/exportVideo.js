@@ -21,6 +21,9 @@ export async function exportVideo({ htmlPath, outputPath, width, height, fps, fo
       window.__NO_AUTOPLAY__ = true;
     });
     await page.goto(`file://${htmlPath}`, { waitUntil: "load" });
+    // Embedded @font-face fonts load asynchronously; without this, early
+    // frames could be captured with the fallback font instead.
+    await page.evaluate(() => document.fonts.ready);
 
     const totalFrames = await page.evaluate(() => window.totalFrames);
 

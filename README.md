@@ -131,6 +131,34 @@ Dostupné klíče:
 }
 ```
 
+### Vlastní fonty (bez systémové instalace)
+
+`fontFamily` výše bere jméno fontu, ale pokud ten font není nainstalovaný systémově (ani na tvém stroji, ani uvnitř headless Chromia, které renderuje video/GIF), prohlížeč potichu spadne na fallback a vzhled sedí jen náhodou. Řešení: nahraj font soubor (`.woff2`/`.woff`/`.ttf`/`.otf`) do projektu, zaregistruj ho v theme configu přes klíč `fonts` a referencuj jeho jméno z `fontFamily`. Nástroj ho zabalí jako base64 přímo do výsledného HTML — funguje to offline i při renderování videa.
+
+```jsonc
+{
+  "fonts": [
+    { "family": "Inter", "path": "fonts/Inter-Regular.woff2", "weight": 400 },
+    { "family": "Inter", "path": "fonts/Inter-Bold.woff2", "weight": 700 }
+  ],
+  "fontFamily": {
+    "title": "Inter, sans-serif"
+  }
+}
+```
+
+Cesta v `path` je relativní k theme JSON souboru — nejjednodušší je dát font soubory do složky `fonts/` vedle configu, např.:
+
+```
+muj-projekt/
+├── theme.json
+└── fonts/
+    ├── Inter-Regular.woff2
+    └── Inter-Bold.woff2
+```
+
+**Google Fonts:** CDN odkaz (`<link href="https://fonts.googleapis.com/...">`) by porušil cíl "žádná závislost na třetí straně" — HTML by pak potřebovalo internet i jen pro zobrazení, a export videa by na načtení fontu musel čekat (nebo by bez internetu selhal). Místo toho si font soubor z Google Fonts stáhni (fonts.google.com → vybraný font → *Download family*, nebo přímo konkrétní `.woff2` přes [google-webfonts-helper](https://gwfh.mranftl.com/fonts)), ulož do `fonts/` ve svém projektu a zaregistruj přes `fonts` klíč výše stejně jako jakýkoli jiný font. Výsledek vypadá identicky, ale zůstává 100% offline.
+
 ## Jak to funguje
 
 - `src/data.js` – parsuje CSV.

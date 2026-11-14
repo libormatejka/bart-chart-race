@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { dirname, extname, join } from "node:path";
 
 const DEFAULT_FONT_STACK = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
@@ -44,6 +45,12 @@ export const DEFAULT_THEME = {
     counterDate: 800,
     counterTotal: 500,
   },
+  // Self-hosted font files to embed, e.g.
+  // [{ "family": "Inter", "path": "fonts/Inter-Bold.woff2", "weight": 700 }]
+  // Reference "family" from fontFamily above. Embedded as base64 into the
+  // generated HTML, so there's no dependency on fonts being installed on
+  // whatever machine opens the file or renders the video.
+  fonts: [],
 };
 
 const MERGEABLE_GROUPS = ["fontFamily", "colors", "fontSize", "fontWeight"];
@@ -55,7 +62,59 @@ const MERGEABLE_GROUPS = ["fontFamily", "colors", "fontSize", "fontWeight"];
 export function loadTheme(path) {
   if (!path) return DEFAULT_THEME;
   const override = JSON.parse(readFileSync(path, "utf8"));
-  return mergeTheme(DEFAULT_THEME, override);
+  const theme = mergeTheme(DEFAULT_THEME, override);
+  theme.fonts = resolveFonts(override.fonts, dirname(path));
+  return theme;
+}
+
+const FONT_MIME_TYPES = {
+  ".woff2": "font/woff2",
+  ".woff": "font/woff",
+  ".ttf": "font/ttf",
+  ".otf": "font/otf",
+};
+
+const FONT_FORMATS = {
+  ".woff2": "woff2",
+  ".woff": "woff",
+  ".ttf": "truetype",
+  ".otf": "opentype",
+};
+
+// Font file paths in the theme JSON are relative to that file, so a theme
+// (and the fonts it ships with) stays portable as one self-contained folder.
+function resolveFonts(fonts, themeDir) {
+  if (!fonts || fonts.length === 0) return [];
+  return fonts.map(({ family, path, weight, style }) => {
+    const ext = extname(path).toLowerCase();
+    const bytes = readFileSync(join(themeDir, path));
+    return {
+      family,
+      weight: weight || "normal",
+      style: style || "normal",
+      format: FONT_FORMATS[ext] || "woff2",
+      dataUri: `data:${FONT_MIME_TYPES[ext] || "font/woff2"};base64,${bytes.toString("base64")}`,
+    };
+  });
+}
+
+/**
+ * Renders @font-face rules that embed each font file as a base64 data URI
+ * — no network request, so these fonts are always available, including
+ * inside the headless browser that renders the video/GIF frames.
+ */
+export function fontsToCssFaces(fonts) {
+  return fonts
+    .map(
+      (f) => `@font-face {
+  font-family: "${f.family}";
+  src: url("${f.dataUri}") format("${f.format}");
+  font-weight: ${f.weight};
+  font-style: ${f.style};
+  font-display: block;
+}`
+    )
+    .join("\n");
 }
 
 function mergeTheme(base, override) {
